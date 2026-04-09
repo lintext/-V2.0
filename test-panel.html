@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>肢体动作系统测试面板</title>
+    <style>
+        body {// 播放动作
+await global.bodyMotionController.playMotion('wave', { duration: 1500 })
+
+// 设置手势
+global.bodyMotionController.setHandGesture('left', 'peace', 500)
+
+// 切换姿态
+global.bodyMotionController.setPosture('sitting', 1000)
+
+// 重置姿态
+global.bodyMotionController.resetPose(800)
+
+// 点击设置按钮
+document.getElementById('btn-open-webui').click()// 播放动作
+await global.bodyMotionController.playMotion('wave', { duration: 1500 })
+
+// 设置手势
+global.bodyMotionController.setHandGesture('left', 'peace', 500)
+
+// 切换姿态
+global.bodyMotionController.setPosture('sitting', 1000)
+
+// 重置姿态
+global.bodyMotionController.resetPose(800)
+
+// 点击设置按钮
+document.getElementById('btn-open-webui').click()
+            font-family: 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            margin: 0;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .section h2 {
+            margin-top: 0;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 10px;
+        }
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 14px;
+        }
+        button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        .status {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .status.success {
+            color: #4ade80;
+        }
+        .status.error {
+            color: #f87171;
+        }
+        .status.info {
+            color: #60a5fa;
+        }
+        .emoji {
+            font-size: 20px;
+            margin-right: 5px;
+        }
+        .instructions {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #4ade80;
+        }
+        .instructions h3 {
+            margin-top: 0;
+        }
+        .instructions ol {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        .instructions li {
+            margin: 5px 0;
+        }
+        code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎭 肢体动作系统测试面板</h1>
+        
+        <div class="instructions">
+            <h3>📋 使用说明</h3>
+            <ol>
+                <li>确保应用程序已启动（Electron窗口已打开）</li>
+                <li>按 <code>F12</code> 或 <code>Ctrl+Shift+I</code> 打开开发者工具</li>
+                <li>在控制台中粘贴并运行此文件中的测试代码</li>
+                <li>或使用下方的快捷测试按钮</li>
+            </ol>
+        </div>
+
+        <div class="section">
+            <h2>🔍 系统状态检查</h2>
+            <div class="button-group">
+                <button onclick="checkSystemStatus()">
+                    <span class="emoji">🔍</span>检查系统状态
+                </button>
+                <button onclick="checkModelType()">
+                    <span class="emoji">📊</span>检查模型类型
+                </button>
+                <button onclick="listAvailableActions()">
+                    <span class="emoji">📋</span>列出可用动作
+                </button>
+            </div>
+            <div id="status-output" class="status"></div>
+        </div>
+
+        <div class="section">
+            <h2>🎭 基础动作测试</h2>
+            <div class="button-group">
+                <button onclick="playMotion('wave')">
+                    <span class="emoji">👋</span>招手
+                </button>
+                <button onclick="playMotion('happy')">
+                    <span class="emoji">😊</span>开心
+                </button>
+                <button onclick="playMotion('thinking')">
+                    <span class="emoji">🤔</span>思考
+                </button>
+                <button onclick="playMotion('dance')">
+                    <span class="emoji">💃</span>跳舞
+                </button>
+                <button onclick="playMotion('singing')">
+                    <span class="emoji">🎤</span>唱歌
+                </button>
+                <button onclick="playMotion('shy')">
+                    <span class="emoji">😳</span>害羞
+                </button>
+                <button onclick="playMotion('angry')">
+                    <span class="emoji">😠</span>生气
+                </button>
+                <button onclick="playMotion('sad')">
+                    <span class="emoji">😢</span>难过
+                </button>
+                <button onclick="playMotion('surprised')">
+                    <span class="emoji">😲</span>惊讶
+                </button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>✋ 手势测试</h2>
+            <div class="button-group">
+                <button onclick="setGesture('left', 'peace')">
+                    <span class="emoji">✌️</span>左手和平
+                </button>
+                <button onclick="setGesture('right', 'thumbsUp')">
+                    <span class="emoji">👍</span>右手点赞
+                </button>
+                <button onclick="setGesture('left', 'fist')">
+                    <span class="emoji">✊</span>左手握拳
+                </button>
+                <button onclick="setGesture('right', 'ok')">
+                    <span class="emoji">👌</span>右手OK
+                </button>
+                <button onclick="setGesture('left', 'point')">
+                    <span class="emoji">👆</span>左手指向
+                </button>
+                <button onclick="setGesture('right', 'rock')">
+                    <span class="emoji">🤘</span>右手摇滚
+                </button>
+                <button onclick="setGesture('left', 'open')">
+                    <span class="emoji">✋</span>左手张开
+                </button>
+                <button onclick="setGesture('right', 'open')">
+                    <span class="emoji">✋</span>右手张开
+                </button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🧍 姿态测试</h2>
+            <div class="button-group">
+                <button onclick="setPosture('standing')">
+                    <span class="emoji">🧍</span>站立
+                </button>
+                <button onclick="setPosture('sitting')">
+                    <span class="emoji">🪑</span>坐姿
+                </button>
+                <button onclick="setPosture('walking')">
+                    <span class="emoji">🚶</span>行走
+                </button>
+                <button onclick="setPosture('leaning')">
+                    <span class="emoji">🛋️</span>倚靠
+                </button>
+                <button onclick="resetPose()">
+                    <span class="emoji">🔄</span>重置姿态
+                </button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>⚙️ 设置按钮测试</h2>
+            <div class="button-group">
+                <button onclick="testSettingsButton()">
+                    <span class="emoji">⚙️</span>测试设置按钮
+                </button>
+                <button onclick="clickSettingsButton()">
+                    <span class="emoji">🖱️</span>点击设置按钮
+                </button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🚀 运行完整测试</h2>
+            <div class="button-group">
+                <button onclick="runAllTests()">
+                    <span class="emoji">🚀</span>运行所有测试
+                </button>
+                <button onclick="clearOutput()">
+                    <span class="emoji">🗑️</span>清空输出
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function log(message, type = 'info') {
+            const output = document.getElementById('status-output');
+            const timestamp = new Date().toLocaleTimeString();
+            const className = type === 'success' ? 'success' : type === 'error' ? 'error' : 'info';
+            output.innerHTML += `<div class="${className}">[${timestamp}] ${message}</div>`;
+            output.scrollTop = output.scrollHeight;
+        }
+
+        function clearOutput() {
+            document.getElementById('status-output').innerHTML = '';
+            log('输出已清空', 'info');
+        }
+
+        function getController() {
+            if (typeof global !== 'undefined' && global.bodyMotionController) {
+                return global.bodyMotionController;
+            } else if (typeof window !== 'undefined' && window.bodyMotionController) {
+                return window.bodyMotionController;
+            }
+            return null;
+        }
+
+        function checkSystemStatus() {
+            log('🔍 检查系统状态...', 'info');
+            const controller = getController();
+            
+            if (controller) {
+                log('✅ bodyMotionController 已初始化', 'success');
+                log(`📊 模型类型: ${controller.modelType}`, 'info');
+            } else {
+                log('❌ bodyMotionController 未初始化', 'error');
+                log('💡 请确保应用已完全启动', 'info');
+            }
+        }
+
+        function checkModelType() {
+            const controller = getController();
+            if (controller) {
+                log(`📊 模型类型: ${controller.modelType}`, 'success');
+            } else {
+                log('❌ 控制器未初始化', 'error');
+            }
+        }
+
+        function listAvailableActions() {
+            const controller = getController();
+            if (controller) {
+                const motions = controller.getAvailableMotions();
+                const gestures = controller.getAvailableGestures();
+                const postures = controller.getAvailablePostures();
+                
+                log(`📋 可用动作 (${motions.length}个): ${motions.join(', ')}`, 'success');
+                log(`✋ 可用手势 (${gestures.length}个): ${gestures.join(', ')}`, 'success');
+                log(`🧍 可用姿态 (${postures.length}个): ${postures.join(', ')}`, 'success');
+            } else {
+                log('❌ 控制器未初始化', 'error');
+            }
+        }
+
+        async function playMotion(motionName) {
+            const controller = getController();
+            if (controller) {
+                log(`🎭 播放动作: ${motionName}`, 'info');
+                try {
+                    await controller.playMotion(motionName, { duration: 1500 });
+                    log(`✅ 动作 ${motionName} 播放完成`, 'success');
+                } catch (error) {
+                    log(`❌ 播放动作失败: ${error.message}`, 'error');
+                }
+            } else {
+                log('❌ 控制器未初始化', 'error');
+            }
+        }
+
+        function setGesture(hand, gesture) {
+            const controller = getController();
+            if (controller) {
+                log(`${hand === 'left' ? '✌️ 左手' : '👍 右手'}手势: ${gesture}`, 'info');
+                try {
+                    controller.setHandGesture(hand, gesture, 500);
+                    log(`✅ 手势设置成功`, 'success');
+                } catch (error) {
+                    log(`❌ 设置手势失败: ${error.message}`, 'error');
+                }
+            } else {
+                log('❌ 控制器未初始化', 'error');
+            }
+        }
+
+        function setPosture(postureName) {
+            const controller = getController();
+            if (controller) {
+                log(`🧍 切换姿态: ${postureName}`, 'info');
+                try {
+                    controller.setPosture(postureName, 1000);
+                    log(`✅ 姿态切换成功`, 'success');
+                } catch (error) {
+                    log(`❌ 切换姿态失败: ${error.message}`, 'error');
+                }
+            } else {
+                log('❌ 控制器未初始化', 'error');
+            }
+        }
+
+        function resetPose() {
+            const controller = getController();
+            if (controller) {
+                log('🔄 重置姿态...', 'info');
+                try {
+                    controller.resetPose(800);
+                    log('✅ 姿态已重置', 'success');
+                } catch (error) {
+                    log(`❌ 重置姿态失败: ${error.message}`, 'error');
+                }
+            } else {
+                log('❌ 控制器未初始化', 'error');
+            }
+        }
+
+        function testSettingsButton() {
+            log('⚙️ 测试设置按钮...', 'info');
+            const btn = document.getElementById('btn-open-webui');
+            if (btn) {
+                log('✅ 设置按钮找到', 'success');
+                log(`📝 按钮文本: ${btn.textContent}`, 'info');
+                log(`📝 按钮标题: ${btn.title}`, 'info');
+                
+                const parentStyle = window.getComputedStyle(btn.parentElement);
+                log(`📝 容器z-index: ${parentStyle.zIndex}`, 'info');
+                log(`📝 容器position: ${parentStyle.position}`, 'info');
+            } else {
+                log('❌ 设置按钮未找到', 'error');
+            }
+        }
+
+        function clickSettingsButton() {
+            log('🖱️ 点击设置按钮...', 'info');
+            const btn = document.getElementById('btn-open-webui');
+            if (btn) {
+                btn.click();
+                log('✅ 设置按钮已点击', 'success');
+            } else {
+                log('❌ 设置按钮未找到', 'error');
+            }
+        }
+
+        async function runAllTests() {
+            log('🚀 开始运行所有测试...', 'info');
+            
+            checkSystemStatus();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            listAvailableActions();
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            await playMotion('wave');
+            await new Promise(resolve => setTimeout(resolve, 2000));
+            
+            setGesture('left', 'peace');
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            setPosture('sitting');
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            resetPose();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            testSettingsButton();
+            
+            log('🎉 所有测试完成！', 'success');
+        }
+
+        // 页面加载时显示提示
+        window.onload = function() {
+            log('💡 提示: 点击按钮进行测试，或查看控制台日志', 'info');
+        };
+    </script>
+</body>
+</html>

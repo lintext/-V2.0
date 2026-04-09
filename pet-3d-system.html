@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D宠物角色系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            max-width: 1400px;
+        }
+
+        .viewer-container {
+            flex: 1;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            position: relative;
+            min-height: 600px;
+        }
+
+        #canvas {
+            width: 100%;
+            height: 600px;
+            display: block;
+        }
+
+        .control-panel {
+            width: 350px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.2);
+            padding: 24px;
+            max-height: 700px;
+            overflow-y: auto;
+        }
+
+        .section {
+            margin-bottom: 24px;
+        }
+
+        .section:last-child {
+            margin-bottom: 0;
+        }
+
+        .section h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .pet-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .pet-btn {
+            padding: 16px 12px;
+            background: linear-gradient(145deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.05));
+            border: 2px solid rgba(102, 126, 234, 0.2);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .pet-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+            border-color: rgba(102, 126, 234, 0.5);
+        }
+
+        .pet-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: transparent;
+        }
+
+        .pet-icon {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .pet-name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .animation-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+        }
+
+        .anim-btn {
+            padding: 12px 8px;
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 13px;
+            font-weight: 600;
+            color: #4a4a6a;
+        }
+
+        .anim-btn:hover {
+            background: rgba(102, 126, 234, 0.2);
+            transform: scale(1.05);
+        }
+
+        .anim-btn.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: transparent;
+        }
+
+        .status-display {
+            padding: 16px;
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 12px;
+            margin-top: 12px;
+        }
+
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .status-label {
+            color: #4a4a6a;
+            font-weight: 600;
+        }
+
+        .status-value {
+            color: #667eea;
+            font-weight: 500;
+        }
+
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(102, 126, 234, 0.2);
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 18px;
+            color: #4a4a6a;
+            font-weight: 600;
+        }
+
+        @media (max-width: 1200px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .control-panel {
+                width: 100%;
+                max-height: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎮 3D宠物角色系统</h1>
+        <p>支持VRM和Live2D模型的动态切换与动画控制</p>
+    </div>
+
+    <div class="container">
+        <div class="viewer-container">
+            <canvas id="canvas"></canvas>
+            <div class="loading-overlay" id="loading">
+                <div class="loading-spinner"></div>
+                <div class="loading-text">正在初始化系统...</div>
+            </div>
+        </div>
+
+        <div class="control-panel">
+            <div class="section">
+                <h3>🐾 宠物选择</h3>
+                <div class="pet-grid" id="pet-grid"></div>
+            </div>
+
+            <div class="section">
+                <h3>🎬 动画控制</h3>
+                <div class="animation-grid" id="animation-grid"></div>
+            </div>
+
+            <div class="section">
+                <h3>📊 状态信息</h3>
+                <div class="status-display">
+                    <div class="status-item">
+                        <span class="status-label">当前宠物</span>
+                        <span class="status-value" id="current-pet">未选择</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">当前动画</span>
+                        <span class="status-value" id="current-animation">idle</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">模型类型</span>
+                        <span class="status-value" id="model-type">-</span>
+                    </div>
+                    <div class="status-item">
+                        <span class="status-label">自动切换</span>
+                        <span class="status-value" id="auto-switch">已启用</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.183.2/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.183.2/examples/jsm/",
+            "@pixiv/three-vrm": "https://unpkg.com/@pixiv/three-vrm@3.5.1/lib/three-vrm.module.js"
+        }
+    }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+        import { VRMLoaderPlugin, VRMUtils } from '@pixiv/three-vrm';
+        import Pet3DManager from './js/features/pet-3d-manager.js';
+
+        let scene, camera, renderer, controls, petManager;
+        const clock = new THREE.Clock();
+
+        const petConfigs = [
+            {
+                id: 'xiaoai',
+                name: '小艾',
+                icon: '👩',
+                type: 'vrm',
+                path: './2D/xiaoai/9090708261140101697.vrm'
+            },
+            {
+                id: 'xiaoyang',
+                name: '小阳',
+                icon: '👨',
+                type: 'vrm',
+                path: './2D/xiaoai/9090708261140101697.vrm'
+            },
+            {
+                id: 'hiyori',
+                name: '日向',
+                icon: '👧',
+                type: 'live2d',
+                path: './2D/xiaoai/hiyori_pro_t11.model3.json'
+            }
+        ];
+
+        const animations = [
+            { id: 'idle', name: '待机', icon: '😌' },
+            { id: 'walk', name: '行走', icon: '🚶' },
+            { id: 'run', name: '奔跑', icon: '🏃' },
+            { id: 'attack', name: '攻击', icon: '⚔️' },
+            { id: 'happy', name: '开心', icon: '😊' },
+            { id: 'sad', name: '悲伤', icon: '😢' }
+        ];
+
+        async function init() {
+            const canvas = document.getElementById('canvas');
+            const loading = document.getElementById('loading');
+
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xf0f0f8);
+
+            camera = new THREE.PerspectiveCamera(
+                30,
+                canvas.clientWidth / canvas.clientHeight,
+                0.1,
+                20
+            );
+            camera.position.set(0, 1.3, 2.5);
+
+            renderer = new THREE.WebGLRenderer({
+                canvas: canvas,
+                antialias: true,
+                alpha: true
+            });
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+            controls = new OrbitControls(camera, renderer.domElement);
+            controls.target.set(0, 1.3, 0);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.update();
+
+            const light = new THREE.DirectionalLight(0xffffff, 1.0);
+            light.position.set(1, 1, 1).normalize();
+            scene.add(light);
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+
+            const gridHelper = new THREE.GridHelper(10, 10);
+            scene.add(gridHelper);
+
+            petManager = new Pet3DManager(scene, THREE);
+
+            for (const config of petConfigs) {
+                await petManager.registerPet(config.id, config.name, config.type, config.path);
+            }
+
+            createUI();
+
+            loading.style.display = 'none';
+
+            animate();
+        }
+
+        function createUI() {
+            const petGrid = document.getElementById('pet-grid');
+            const animGrid = document.getElementById('animation-grid');
+
+            petConfigs.forEach((pet) => {
+                const btn = document.createElement('button');
+                btn.className = 'pet-btn';
+                btn.innerHTML = `
+                    <div class="pet-icon">${pet.icon}</div>
+                    <div class="pet-name">${pet.name}</div>
+                `;
+                btn.onclick = () => selectPet(pet.id);
+                petGrid.appendChild(btn);
+            });
+
+            animations.forEach((anim) => {
+                const btn = document.createElement('button');
+                btn.className = 'anim-btn';
+                btn.innerHTML = `${anim.icon} ${anim.name}`;
+                btn.onclick = () => playAnimation(anim.id);
+                animGrid.appendChild(btn);
+            });
+        }
+
+        async function selectPet(petId) {
+            const loading = document.getElementById('loading');
+            loading.style.display = 'flex';
+            loading.querySelector('.loading-text').textContent = `正在加载 ${petConfigs.find(p => p.id === petId).name}...`;
+
+            try {
+                await petManager.switchPet(petId);
+                
+                document.querySelectorAll('.pet-btn').forEach((btn, index) => {
+                    btn.classList.toggle('active', petConfigs[index].id === petId);
+                });
+
+                updateStatus();
+            } catch (error) {
+                console.error('加载宠物失败:', error);
+                alert('加载宠物失败: ' + error.message);
+            } finally {
+                loading.style.display = 'none';
+            }
+        }
+
+        function playAnimation(animId) {
+            petManager.playAnimation(animId);
+            
+            document.querySelectorAll('.anim-btn').forEach((btn, index) => {
+                btn.classList.toggle('active', animations[index].id === animId);
+            });
+
+            updateStatus();
+        }
+
+        function updateStatus() {
+            const currentPet = petManager.getCurrentPet();
+            const currentState = petManager.getCurrentState();
+
+            document.getElementById('current-pet').textContent = currentPet ? currentPet.name : '未选择';
+            document.getElementById('current-animation').textContent = currentState;
+            document.getElementById('model-type').textContent = currentPet ? currentPet.type.toUpperCase() : '-';
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            const delta = clock.getDelta();
+
+            if (petManager) {
+                petManager.update();
+            }
+
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        window.addEventListener('resize', () => {
+            const canvas = document.getElementById('canvas');
+            camera.aspect = canvas.clientWidth / canvas.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+        });
+
+        init();
+    </script>
+</body>
+</html>

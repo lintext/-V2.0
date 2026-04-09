@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VRM模型查看器</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .container {
+            display: flex;
+            gap: 20px;
+            width: 100%;
+            max-width: 1400px;
+        }
+
+        .viewer-container {
+            flex: 1;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+            position: relative;
+            min-height: 600px;
+        }
+
+        #canvas {
+            width: 100%;
+            height: 600px;
+            display: block;
+        }
+
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.95);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(102, 126, 234, 0.2);
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 18px;
+            color: #4a4a6a;
+            font-weight: 600;
+        }
+
+        .info-panel {
+            width: 400px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.2);
+            padding: 24px;
+            max-height: 700px;
+            overflow-y: auto;
+        }
+
+        .info-section {
+            margin-bottom: 24px;
+        }
+
+        .info-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .info-section h3 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .info-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            padding: 8px 12px;
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 8px;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #4a4a6a;
+        }
+
+        .info-value {
+            color: #667eea;
+            font-weight: 500;
+        }
+
+        .bone-list {
+            max-height: 200px;
+            overflow-y: auto;
+            background: rgba(102, 126, 234, 0.05);
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .bone-item {
+            padding: 6px 0;
+            font-size: 13px;
+            color: #4a4a6a;
+            border-bottom: 1px solid rgba(102, 126, 234, 0.1);
+        }
+
+        .bone-item:last-child {
+            border-bottom: none;
+        }
+
+        .error-message {
+            background: #fee;
+            border: 1px solid #fcc;
+            color: #c33;
+            padding: 16px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        .controls {
+            margin-top: 20px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .control-btn {
+            padding: 12px 24px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .control-btn:active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 1200px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .info-panel {
+                width: 100%;
+                max-height: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🎭 VRM模型查看器</h1>
+        <p>加载并解析VRM模型文件</p>
+    </div>
+
+    <div class="container">
+        <div class="viewer-container">
+            <canvas id="canvas"></canvas>
+            <div class="loading-overlay" id="loading">
+                <div class="loading-spinner"></div>
+                <div class="loading-text">正在加载VRM模型...</div>
+            </div>
+        </div>
+
+        <div class="info-panel">
+            <div class="info-section">
+                <h3>📋 基本信息</h3>
+                <div id="basic-info"></div>
+            </div>
+
+            <div class="info-section">
+                <h3>🦴 骨骼信息</h3>
+                <div class="bone-list" id="bone-list"></div>
+            </div>
+
+            <div class="info-section">
+                <h3>🎨 材质信息</h3>
+                <div id="material-info"></div>
+            </div>
+
+            <div class="info-section">
+                <h3>🎬 动画信息</h3>
+                <div id="animation-info"></div>
+            </div>
+
+            <div class="controls">
+                <button class="control-btn" onclick="resetCamera()">重置相机</button>
+                <button class="control-btn" onclick="toggleAnimation()">切换动画</button>
+                <button class="control-btn" onclick="exportInfo()">导出信息</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.183.2/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.183.2/examples/jsm/",
+            "@pixiv/three-vrm": "https://unpkg.com/@pixiv/three-vrm@3.5.1/lib/three-vrm.module.js"
+        }
+    }
+    </script>
+
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+        import { VRMLoaderPlugin, VRMUtils } from '@pixiv/three-vrm';
+
+        let scene, camera, renderer, controls, vrm;
+        let animationEnabled = true;
+        const clock = new THREE.Clock();
+
+        const vrmPath = './2D/xiaoai/9090708261140101697.vrm';
+
+        async function init() {
+            const canvas = document.getElementById('canvas');
+            const loading = document.getElementById('loading');
+
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xf0f0f8);
+
+            camera = new THREE.PerspectiveCamera(
+                30,
+                canvas.clientWidth / canvas.clientHeight,
+                0.1,
+                20
+            );
+            camera.position.set(0, 1.3, 2.5);
+
+            renderer = new THREE.WebGLRenderer({
+                canvas: canvas,
+                antialias: true,
+                alpha: true
+            });
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.outputColorSpace = THREE.SRGBColorSpace;
+
+            controls = new OrbitControls(camera, renderer.domElement);
+            controls.target.set(0, 1.3, 0);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.minDistance = 1;
+            controls.maxDistance = 5;
+            controls.update();
+
+            const light = new THREE.DirectionalLight(0xffffff, 1.0);
+            light.position.set(1, 1, 1).normalize();
+            scene.add(light);
+
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+
+            const gridHelper = new THREE.GridHelper(10, 10);
+            scene.add(gridHelper);
+
+            try {
+                const gltfLoader = new GLTFLoader();
+                gltfLoader.register((parser) => {
+                    return new VRMLoaderPlugin(parser);
+                });
+
+                const gltf = await gltfLoader.loadAsync(vrmPath);
+                vrm = gltf.userData.vrm;
+
+                if (!vrm) {
+                    throw new Error('VRM模型加载失败');
+                }
+
+                VRMUtils.removeUnnecessaryJoints(gltf.scene);
+                VRMUtils.rotateVRM0(vrm);
+
+                scene.add(vrm.scene);
+                displayModelInfo(vrm);
+                loading.style.display = 'none';
+
+                animate();
+
+            } catch (error) {
+                console.error('加载VRM模型失败:', error);
+                loading.innerHTML = `
+                    <div class="error-message">
+                        <h3>❌ 加载失败</h3>
+                        <p>${error.message}</p>
+                        <p style="margin-top: 10px; font-size: 14px;">请检查VRM文件路径是否正确</p>
+                    </div>
+                `;
+            }
+        }
+
+        function displayModelInfo(vrm) {
+            const basicInfo = document.getElementById('basic-info');
+            const boneList = document.getElementById('bone-list');
+            const materialInfo = document.getElementById('material-info');
+            const animationInfo = document.getElementById('animation-info');
+
+            const meta = vrm.meta;
+            basicInfo.innerHTML = `
+                <div class="info-item">
+                    <span class="info-label">模型名称</span>
+                    <span class="info-value">${meta.name || '未知'}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">版本</span>
+                    <span class="info-value">${meta.version || '未知'}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">作者</span>
+                    <span class="info-value">${meta.authors?.join(', ') || '未知'}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">联系方式</span>
+                    <span class="info-value">${meta.contactInformation || '未知'}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">参考URL</span>
+                    <span class="info-value">${meta.references?.[0] || '无'}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">VRM版本</span>
+                    <span class="info-value">${vrm.meta.metaVersion || '未知'}</span>
+                </div>
+            `;
+
+            const humanoid = vrm.humanoid;
+            const bones = humanoid.humanBones;
+            let boneHTML = '';
+            for (const boneName in bones) {
+                const bone = bones[boneName];
+                if (bone && bone.node) {
+                    boneHTML += `<div class="bone-item">🦴 ${boneName}</div>`;
+                }
+            }
+            boneList.innerHTML = boneHTML;
+
+            const materials = vrm.scene.children[0]?.children || [];
+            materialInfo.innerHTML = `
+                <div class="info-item">
+                    <span class="info-label">材质数量</span>
+                    <span class="info-value">${materials.length}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">表情数量</span>
+                    <span class="info-value">${vrm.expressionManager?.expressions?.length || 0}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">LookAt功能</span>
+                    <span class="info-value">${vrm.lookAt ? '✅ 支持' : '❌ 不支持'}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">SpringBone</span>
+                    <span class="info-value">${vrm.springBoneManager ? '✅ 支持' : '❌ 不支持'}</span>
+                </div>
+            `;
+
+            animationInfo.innerHTML = `
+                <div class="info-item">
+                    <span class="info-label">IK支持</span>
+                    <span class="info-value">${vrm.ikController ? '✅ 支持' : '❌ 不支持'}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">第一人称</span>
+                    <span class="info-value">${vrm.firstPerson ? '✅ 支持' : '❌ 不支持'}</span>
+                </div>
+                <div class="info-item">
+                    <span class="info-label">动画状态</span>
+                    <span class="info-value" id="animation-status">${animationEnabled ? '▶️ 播放中' : '⏸️ 已暂停'}</span>
+                </div>
+            `;
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+
+            const deltaTime = clock.getDelta();
+
+            if (vrm && animationEnabled) {
+                vrm.update(deltaTime);
+            }
+
+            controls.update();
+            renderer.render(scene, camera);
+        }
+
+        window.resetCamera = function() {
+            camera.position.set(0, 1.3, 2.5);
+            controls.target.set(0, 1.3, 0);
+            controls.update();
+        };
+
+        window.toggleAnimation = function() {
+            animationEnabled = !animationEnabled;
+            const status = document.getElementById('animation-status');
+            if (status) {
+                status.textContent = animationEnabled ? '▶️ 播放中' : '⏸️ 已暂停';
+            }
+        };
+
+        window.exportInfo = function() {
+            if (!vrm) {
+                alert('模型未加载');
+                return;
+            }
+
+            const info = {
+                meta: vrm.meta,
+                humanoid: Object.keys(vrm.humanoid.humanBones),
+                expressions: vrm.expressionManager?.expressions?.map(e => e.name) || [],
+                features: {
+                    lookAt: !!vrm.lookAt,
+                    springBone: !!vrm.springBoneManager,
+                    ik: !!vrm.ikController,
+                    firstPerson: !!vrm.firstPerson
+                }
+            };
+
+            const blob = new Blob([JSON.stringify(info, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'vrm-model-info.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        };
+
+        window.addEventListener('resize', () => {
+            const canvas = document.getElementById('canvas');
+            camera.aspect = canvas.clientWidth / canvas.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+        });
+
+        init();
+    </script>
+</body>
+</html>

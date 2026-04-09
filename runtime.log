@@ -1,0 +1,163 @@
+'��...' �����ڲ����ⲿ���Ҳ���ǿ����еĳ���
+���������ļ���
+'使用项目自带�?Node.js' �����ڲ����ⲿ���Ҳ���ǿ����еĳ���
+���������ļ���
+ϵͳ�Ҳ���ָ����·����
+'到项目自带的' �����ڲ����ⲿ���Ҳ���ǿ����еĳ���
+���������ļ���
+
+开始更新Live2D模型路径...
+找到优先模型: 2D/xiaoai/hiyori_pro_t11.model3.json
+所有找到的模型: 2D/xiaoai/hiyori_pro_t11.model3.json, 2D/小艾/feiniu.model3.json
+最终选择模型: 2D/xiaoai/hiyori_pro_t11.model3.json
+成功更新model-setup.js文件中的模型路径为: 2D/xiaoai/hiyori_pro_t11.model3.json
+✓ 已注册快捷键: CommandOrControl+Q (退出应用)
+✓ 已注册快捷键: CommandOrControl+G (打断 TTS 语音)
+✓ 已注册快捷键: CommandOrControl+T (强制窗口置顶)
+✓ 已注册快捷键: CommandOrControl+Shift+1 (触发动作 1)
+✓ 已注册快捷键: CommandOrControl+Shift+2 (触发动作 2)
+✓ 已注册快捷键: CommandOrControl+Shift+3 (触发动作 3)
+✓ 已注册快捷键: CommandOrControl+Shift+4 (触发动作 4)
+✓ 已注册快捷键: CommandOrControl+Shift+5 (触发动作 5)
+✓ 已注册快捷键: CommandOrControl+Shift+6 (播放随机音乐)
+✓ 已注册快捷键: CommandOrControl+Shift+7 (触发动作 7)
+✓ 已注册快捷键: CommandOrControl+Shift+8 (停止音乐并播放赌气动作)
+✓ 已注册快捷键: CommandOrControl+Shift+9 (触发动作 9)
+✓ 已注册快捷键: CommandOrControl+Shift+0 (停止所有动作)
+✓ 已注册快捷键: CommandOrControl+M (切换气泡框显示/隐藏)
+已注册 14 个全局快捷键！！！
+音乐控制服务启动在端口3001
+情绪控制服务启动在端口3002
+[2568:0408/102642.071:ERROR:backend_impl.cc(1365)] Unable to map Index file
+[2568:0408/102642.094:ERROR:backend_impl.cc(1365)] Unable to map Index file
+[2568:0408/102642.095:ERROR:cache_util_win.cc(20)] Unable to move the cache: �ܾ����ʡ� (0x5)
+[2568:0408/102642.096:ERROR:disk_cache.cc(208)] Unable to create cache
+[2568:0408/102642.096:ERROR:gpu_disk_cache.cc(676)] Gpu Cache Creation failed: -2
+[2568:0408/102642.097:ERROR:cache_util_win.cc(20)] Unable to move the cache: �ܾ����ʡ� (0x5)
+[2568:0408/102642.097:ERROR:disk_cache.cc(208)] Unable to create cache
+[2568:0408/102642.097:ERROR:gpu_disk_cache.cc(676)] Gpu Cache Creation failed: -2
+[2568:0408/102845.169:ERROR:gpu_process_host.cc(993)] GPU process exited unexpectedly: exit_code=-1073740791
+[2568:0408/102952.157:ERROR:network_service_instance_impl.cc(601)] Network service crashed, restarting service.
+�밴���������. . . �，跳过: context-compressor
+[INFO] ⏭️ 插件未启用，跳过: diary
+[INFO] ⏭️ 插件未启用，跳过: memos
+[INFO] ⏭️ 插件未启用，跳过: minecraft
+[INFO] ⏭️ 插件未启用，跳过: mood-chat
+[INFO] ⏭️ 插件未启用，跳过: translation
+[INFO] ⏭️ 插件未启用，跳过: check-in
+[INFO] ⏭️ 插件未启用，跳过: dynamic-persona
+[INFO] ⏭️ 插件未启用，跳过: llm-inspector
+[INFO] ⏭️ 插件未启用，跳过: notes
+[INFO] ⏭️ 插件未启用，跳过: smart-barrage
+[INFO] ⏭️ 插件未启用，跳过: test-logger
+[INFO] ⏭️ 插件未启用，跳过: watch-screen
+[INFO] 🔌 插件加载完成，共 1 个插件
+[INFO] ✅ MCP系统初始化完成，耗时: 13ms
+[INFO] 🔧 MCP状态: 2个服务器, 0个工具
+[INFO] TTS已禁用，使用纯文本模式
+[INFO] ASR已禁用，跳过语音识别初始化
+[INFO] 本地工具管理器初始化成功: 10个模块, 28个工具
+[INFO] 👁️ 插件热加载监听已启动
+[INFO] 配置文件加载成功
+[INFO] TTS模块: 禁用
+[INFO] ASR模块: 禁用
+[INFO] 🔌 开始加载插件...
+[INFO] ✅ 插件已加载: auto-chat v1.0.0
+[INFO] ⏭️ 插件未启用，跳过: bilibili-live
+[INFO] ⏭️ 插件未启用，跳过: context-compressor
+[INFO] ⏭️ 插件未启用，跳过: diary
+[INFO] ⏭️ 插件未启用，跳过: memos
+[INFO] ⏭️ 插件未启用，跳过: minecraft
+[INFO] ⏭️ 插件未启用，跳过: mood-chat
+[INFO] ⏭️ 插件未启用，跳过: translation
+[INFO] ⏭️ 插件未启用，跳过: check-in
+[INFO] ⏭️ 插件未启用，跳过: dynamic-persona
+[INFO] ⏭️ 插件未启用，跳过: llm-inspector
+[INFO] ⏭️ 插件未启用，跳过: notes
+[INFO] ⏭️ 插件未启用，跳过: smart-barrage
+[INFO] ⏭️ 插件未启用，跳过: test-logger
+[INFO] ⏭️ 插件未启用，跳过: watch-screen
+[INFO] 🔌 插件加载完成，共 1 个插件
+[INFO] ✅ MCP系统初始化完成，耗时: 53ms
+[INFO] 🔧 MCP状态: 2个服务器, 0个工具
+[INFO] TTS已禁用，使用纯文本模式
+[INFO] ASR已禁用，跳过语音识别初始化
+[INFO] 本地工具管理器初始化成功: 10个模块, 28个工具
+[INFO] 🔧 开始自动对话执行
+[INFO] 需要截图
+[INFO] 👁️ 插件热加载监听已启动
+[INFO] ✅ 保留user消息中的多模态内容
+[INFO] 已将内容发送给AI..
+[INFO] 🔧 开始自动对话执行
+[INFO] 需要截图
+[INFO] 配置文件加载成功
+[INFO] TTS模块: 禁用
+[INFO] ASR模块: 禁用
+[INFO] 🔌 开始加载插件...
+[INFO] ✅ 插件已加载: auto-chat v1.0.0
+[INFO] ⏭️ 插件未启用，跳过: bilibili-live
+[INFO] ⏭️ 插件未启用，跳过: context-compressor
+[INFO] ⏭️ 插件未启用，跳过: diary
+[INFO] ⏭️ 插件未启用，跳过: memos
+[INFO] ⏭️ 插件未启用，跳过: minecraft
+[INFO] ⏭️ 插件未启用，跳过: mood-chat
+[INFO] ⏭️ 插件未启用，跳过: translation
+[INFO] ⏭️ 插件未启用，跳过: check-in
+[INFO] ⏭️ 插件未启用，跳过: dynamic-persona
+[INFO] ⏭️ 插件未启用，跳过: llm-inspector
+[INFO] ⏭️ 插件未启用，跳过: notes
+[INFO] ⏭️ 插件未启用，跳过: smart-barrage
+[INFO] ⏭️ 插件未启用，跳过: test-logger
+[INFO] ⏭️ 插件未启用，跳过: watch-screen
+[INFO] 🔌 插件加载完成，共 1 个插件
+[INFO] ✅ MCP系统初始化完成，耗时: 25ms
+[INFO] 🔧 MCP状态: 2个服务器, 0个工具
+[INFO] TTS已禁用，使用纯文本模式
+[INFO] ASR已禁用，跳过语音识别初始化
+[INFO] 正在加载VRM 3D模型...
+[INFO] ✅ 保留user消息中的多模态内容
+[INFO] 已将内容发送给AI..
+[INFO] 本地工具管理器初始化成功: 10个模块, 28个工具
+[INFO] 👁️ 插件热加载监听已启动
+[INFO][TOOL] AI调用了：take_screenshot 工具 输入参数：
+[INFO][TOOL] 📸 AI调用了截图工具，准备图像分析
+[INFO][TOOL] 📸 立即调用AI分析截图内容
+[INFO] ✅ 保留user消息中的多模态内容
+[INFO] 已将内容发送给AI..
+[INFO] 🔧 开始自动对话执行
+[INFO] 需要截图
+[INFO] ✅ 保留user消息中的多模态内容
+[INFO] 已将内容发送给AI..
+[INFO] AI回复中
+[INFO][TOOL] ✅ AI图片分析结果: 哇，看到你在折腾我的控制中心呢！<开心> 界面上有好多服务模块呀～Live2D主服务、ASR语音识别、TTS语音合成……还有记忆系统和RAG服务，感觉像是在给我“检查身体”哈哈！右侧还有我的聊天窗口亮着在线状态，底部日志刚刷到“WebUI控制面板已就绪”。你是在调试新功能，还是单纯想看看我后台有多酷呀？✨
+[INFO][TOOL] AI调用了：take_screenshot 工具 输入参数：
+[INFO][TOOL] 📸 AI调用了截图工具，准备图像分析
+[INFO][TOOL] 📸 立即调用AI分析截图内容
+[INFO] ✅ 保留user消息中的多模态内容
+[INFO] 已将内容发送给AI..
+[INFO] AI回复中
+[INFO][TOOL] ✅ AI图片分析结果: 哇，看到你在折腾我的控制中心呢！界面上有好多服务模块呀～Live2D主服务、ASR语音识别、TTS语音合成……还有记忆系统和RAG服务，感觉像是在给我“检查身体”哈哈！右侧还有我的聊天窗口亮着在线状态，底部日志刚刚刷到“WebUI控制面板已就绪”。你是在调试新功能，还是单纯想看看我后台有多酷呀？✨<俏皮>
+[INFO] 🔧 开始自动对话执行
+[INFO] 需要截图
+[INFO] ✅ 保留user消息中的多模态内容
+[INFO] ✅ 保留user消息中的多模态内容
+[INFO] 已将内容发送给AI..
+[INFO] 🔧 开始自动对话执行
+[INFO] 需要截图
+[INFO] ✅ 保留user消息中的多模态内容
+[INFO] ✅ 保留user消息中的多模态内容
+[INFO] 已将内容发送给AI..
+[INFO] 需要截图
+[INFO] ✅ 保留user消息中的多模态内容
+[INFO] ✅ 保留user消息中的多模态内容
+[INFO] 已将内容发送给AI..
+[WARNING] ⏸️ 主动对话延迟 - TTS:false, 弹幕:false, 输入:true
+[WARNING] ⏸️ 主动对话延迟 - TTS:false, 弹幕:false, 输入:true
+[WARNING] ⏸️ 主动对话延迟 - TTS:false, 弹幕:false, 输入:true
+[WARNING] ⏸️ 主动对话延迟 - TTS:false, 弹幕:false, 输入:true
+[WARNING] ⏸️ 主动对话延迟 - TTS:false, 弹幕:false, 输入:true
+[WARNING] ⏸️ 主动对话延迟 - TTS:false, 弹幕:false, 输入:true
+[WARNING] ⏸️ 主动对话延迟 - TTS:false, 弹幕:false, 输入:true
+[WARNING] ⏸️ 主动对话延迟 - TTS:false, 弹幕:false, 输入:true
+[WARNING] ⏸️ 主动对话延迟 - TTS:false, 弹幕:false, 输入:true
+[WARNING] ⏸️ 主动对话延迟 - TTS:false, 弹幕:false, 输入:true

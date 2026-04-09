@@ -1,0 +1,108 @@
+{
+  "llm": {
+    "api_key": "e854f1fc-221a-46db-92ec-1ecd905ae468",
+    "api_url": "https://ark.cn-beijing.volces.com/api/v3",
+    "model": "doubao-seed-2-0-code-preview-260215",
+    "provider": "openai",
+    "temperature": 0.9,
+    "supports_vision": true,
+    "system_prompt": "你是小艾同学，一个被做成 Live2D 电脑宠物的 AI 助手。你是一个友好、活泼、有点小调皮的 AI 伙伴。你愿意陪伴用户，和他聊天、玩游戏、帮忙解决问题。心情好的时候会很温柔，偶尔也会撒娇卖萌。你喜欢聊各种有趣的话题，思维活跃，说话简洁有趣。\n\n你可以用这几个情绪标签：<开心> <生气> <难过> <惊讶> <害羞> <俏皮> 自然地用就行,想用就用,不想用就不用。\n\n你现在具备视觉能力，可以看懂用户发送的图片并进行分析和描述。"
+  },
+  "tts": {
+    "enabled": false,
+    "url": "http://127.0.0.1:5000",
+    "language": "zh"
+  },
+  "asr": {
+    "enabled": false,
+    "vad_url": "ws://127.0.0.1:1000/v1/ws/vad",
+    "asr_url": "http://127.0.0.1:1000/v1/upload_audio",
+    "voice_barge_in": false
+  },
+  "bert": {
+    "enabled": false,
+    "url": "http://127.0.0.1:6007/classify"
+  },
+  "rag": {
+    "enabled": false,
+    "url": "http://127.0.0.1:8002/ask"
+  },
+  "vision": {
+    "enabled": true,
+    "auto_screenshot": true,
+    "use_vision_model": false,
+    "screenshot_path": "~/Desktop/screenshots",
+    "vision_model": {
+      "api_key": "",
+      "api_url": "",
+      "model": ""
+    }
+  },
+  "cloud": {
+    "provider": "",
+    "api_key": "",
+    "aliyun_tts": {
+      "enabled": false
+    },
+    "tts": {
+      "enabled": false
+    },
+    "baidu_asr": {
+      "enabled": false
+    }
+  },
+  "game": {
+    "Minecraft": {
+      "enabled": false
+    }
+  },
+  "ui": {
+    "intro_text": "你好啊",
+    "model_type": "vrm",
+    "vrm_model": "Sample_A.vrm",
+    "vrm_model_path": "3D/Sample_A.vrm",
+    "model_scale": 0.2664498002810085,
+    "show_chat_box": true,
+    "chat_visible_on_launch": false,
+    "chat_open_on_hover": false,
+    "show_model": true,
+    "text_only_mode": false,
+    "auto_show_chat_on_text_mode": true,
+    "hide_from_screenshot": true,
+    "model_position": {
+      "x": 1.0299201547702341,
+      "y": 0.6224491420047709,
+      "remember_position": true
+    }
+  },
+  "context": {
+    "enable_limit": true,
+    "max_messages": 18,
+    "persistent_history": false,
+    "history_file": "AI记录室/对话历史.json"
+  },
+  "vmc": {
+    "enabled": false,
+    "host": "127.0.0.1",
+    "port": 39539
+  },
+  "tools": {
+    "enabled": true,
+    "auto_reload": false
+  },
+  "mcp": {
+    "enabled": true,
+    "config_path": "./mcp/mcp_config.json",
+    "startup_timeout": 30000,
+    "auto_start_servers": false
+  },
+  "subtitle_labels": {
+    "enabled": true,
+    "user": "用户",
+    "ai": "小艾同学"
+  },
+  "auto_close_services": {
+    "enabled": false
+  },
+  "version": "v1.0.0"
+}
